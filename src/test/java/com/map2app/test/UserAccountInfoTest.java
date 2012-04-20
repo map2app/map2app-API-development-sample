@@ -3,6 +3,8 @@
  */
 package com.map2app.test;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.net.Socket;
 import java.util.logging.Logger;
@@ -11,6 +13,7 @@ import org.apache.http.HttpException;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
 import org.apache.http.impl.DefaultHttpClientConnection;
 import org.apache.http.message.BasicHttpRequest;
@@ -102,8 +105,10 @@ public class UserAccountInfoTest {
 					.execute(request, conn, context);
 			response.setParams(params);
 			httpexecutor.postProcess(response, httpproc, context);
-
-			log.info("<< Response: " + response.getStatusLine());
+			
+			assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
+			
+			log.info("<< Response: ");
 			log.info(EntityUtils.toString(response.getEntity()));
 			conn.close();
 			log.info("Connection closed!");
