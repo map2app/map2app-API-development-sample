@@ -5,4 +5,16 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>map2app-API-development-sample</name>
   <description>A sample project to interact with map2app API </description>
+  <dependencies>
+  	<dependency>
+  		<groupId>junit</groupId>
+  		<artifactId>junit</artifactId>
+  		<version>4.8</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.apache.httpcomponents</groupId>
+  		<artifactId>httpclient</artifactId>
+  		<version>4.1.2</version>
+  	</dependency>
+  </dependencies>
 </project>

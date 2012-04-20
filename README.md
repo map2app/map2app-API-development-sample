@@ -1,19 +1,24 @@
 map2app API
 ===========
 
-We created this sample project to help developers in interacting with our APIs.
+We created this sample Maven project to help developers in interacting with our APIs. 
 
 
 Inizialization
 --------------
 
-* request the access to our platform [map2app](http://www.map2app.com/)
+* request access to our platform [map2app](http://www.map2app.com/)
 * login to our backoffice [map2app backoffice](http://cms.map2app.com/)
 * check out your [map2app API credentials][1]
 
 You will need two informations to interact with the api:
+
 1. your "userAccount key": you will find it [there][1] as the attribute of the tag <userAccount>
 2. your "apiKey": you will find it [there][1] as a node of the tag <userAccount>
+
+Once you discovered these two informations, put in the file UserAccountInfoTest.java, in the two static properties:
+* USER_KEY
+* API_SECRET
 
 Usage
 -----
