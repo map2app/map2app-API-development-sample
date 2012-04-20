@@ -6,31 +6,18 @@ package com.map2app.test;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.util.logging.Logger;
 
+import javax.net.ssl.HostnameVerifier;
+
 import org.apache.http.HttpException;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.HttpVersion;
-import org.apache.http.impl.DefaultHttpClientConnection;
-import org.apache.http.message.BasicHttpRequest;
-import org.apache.http.params.HttpParams;
-import org.apache.http.params.HttpProtocolParams;
-import org.apache.http.params.SyncBasicHttpParams;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.ExecutionContext;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.protocol.HttpProcessor;
-import org.apache.http.protocol.HttpRequestExecutor;
-import org.apache.http.protocol.ImmutableHttpProcessor;
-import org.apache.http.protocol.RequestConnControl;
-import org.apache.http.protocol.RequestContent;
-import org.apache.http.protocol.RequestExpectContinue;
-import org.apache.http.protocol.RequestTargetHost;
-import org.apache.http.protocol.RequestUserAgent;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -63,60 +50,23 @@ public class UserAccountInfoTest {
 
 	@Test
 	public void testGetInfo() throws IOException, HttpException {
-		HttpParams params = new SyncBasicHttpParams();
-		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-		HttpProtocolParams.setContentCharset(params, "UTF-8");
-		HttpProtocolParams.setUserAgent(params,
-				"map2app-API-development-sample/0.0.1-SNAPSHOT");
-		HttpProtocolParams.setUseExpectContinue(params, true);
-
-		HttpProcessor httpproc = new ImmutableHttpProcessor(
-				new HttpRequestInterceptor[] {
-						// Required protocol interceptors
-						new RequestContent(), new RequestTargetHost(),
-						// Recommended protocol interceptors
-						new RequestConnControl(), new RequestUserAgent(),
-						new RequestExpectContinue() });
-
-		HttpRequestExecutor httpexecutor = new HttpRequestExecutor();
-
-		HttpContext context = new BasicHttpContext(null);
-		HttpHost host = new HttpHost("maptoapp.appspot.com", 80);
-
-		DefaultHttpClientConnection conn = new DefaultHttpClientConnection();
-		context.setAttribute(ExecutionContext.HTTP_CONNECTION, conn);
-		context.setAttribute(ExecutionContext.HTTP_TARGET_HOST, host);
-
+		HttpClient httpclient = new DefaultHttpClient();
+		
+		HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+		
 		try {
+			HttpGet httpget = new HttpGet("https://maptoapp.appspot.com/api/useraccounts/" + USER_KEY + "?userKey="+ USER_KEY + "&apiSecret=" + API_SECRET);
+			httpget.setHeader("accept", "application/json");
+			log.info(">> Request: " + httpget.getURI());
 
-			String target = "/api/useraccounts/" + USER_KEY + "?userKey="
-					+ USER_KEY + "&apiSecret=" + API_SECRET;
+			// Create a response handler
+            HttpResponse response = httpclient.execute(httpget);
+            assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
+            log.info("<< Response: " +EntityUtils.toString(response.getEntity()));
 
-			Socket socket = new Socket(host.getHostName(), host.getPort());
-			conn.bind(socket, params);
-
-			BasicHttpRequest request = new BasicHttpRequest("GET", target);
-			request.addHeader("accept", "application/json");
-			log.info(">> Request URI: " + request.getRequestLine().getUri());
-
-			request.setParams(params);
-			httpexecutor.preProcess(request, httpproc, context);
-			HttpResponse response = httpexecutor
-					.execute(request, conn, context);
-			response.setParams(params);
-			httpexecutor.postProcess(response, httpproc, context);
-			
-			assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
-			
-			log.info("<< Response: ");
-			log.info(EntityUtils.toString(response.getEntity()));
-			conn.close();
-			log.info("Connection closed!");
-
-		} finally {
-			conn.close();
-			log.info("Connection closed!");
-		}
+        } finally {
+            httpclient.getConnectionManager().shutdown();
+        }
 	}
 
 }
