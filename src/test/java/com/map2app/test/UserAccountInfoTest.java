@@ -14,9 +14,7 @@ import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.junit.After;
@@ -33,7 +31,7 @@ public class UserAccountInfoTest {
 
 	private static final String USER_KEY = "<put-here-your-user-key>";
 	private static final String API_SECRET = "<put-here-your-user-secret>";
-
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -57,6 +55,7 @@ public class UserAccountInfoTest {
 		try {
 			HttpGet httpget = new HttpGet("https://maptoapp.appspot.com/api/useraccounts/" + USER_KEY + "?userKey="+ USER_KEY + "&apiSecret=" + API_SECRET);
 			httpget.setHeader("accept", "application/json");
+			httpget.setHeader("User-Agent", "map2app-API-development-sample/0.0.2-SNAPSHOT");
 			log.info(">> Request: " + httpget.getURI());
 
 			// Create a response handler
