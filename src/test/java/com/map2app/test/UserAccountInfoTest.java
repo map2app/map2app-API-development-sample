@@ -53,7 +53,7 @@ public class UserAccountInfoTest {
 		HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
 		
 		try {
-			HttpGet httpget = new HttpGet("https://maptoapp.appspot.com/api/useraccounts/" + USER_KEY + "?userKey="+ USER_KEY + "&apiSecret=" + API_SECRET);
+			HttpGet httpget = new HttpGet("https://map2app-platform.appspot.com/api/useraccounts/" + USER_KEY + "?userKey="+ USER_KEY + "&apiSecret=" + API_SECRET);
 			httpget.setHeader("accept", "application/json");
 			httpget.setHeader("User-Agent", "map2app-API-development-sample/0.0.2-SNAPSHOT");
 			log.info(">> Request: " + httpget.getURI());
