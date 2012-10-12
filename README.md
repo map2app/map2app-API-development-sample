@@ -37,5 +37,5 @@ Contributing
 5. Create an [Issue][2] with a link to your branch
 6. Enjoy one of our apps and wait
 
-[1]: http://cms.map2app.com/session/useraccounts/me
+[1]: http://cms.map2app.com/session/useraccounts/myself
 [2]: https://github.com/map2app/map2app-API-development-sample/issues
